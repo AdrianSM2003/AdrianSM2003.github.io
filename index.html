@@ -231,7 +231,7 @@
         function showImage() {
             const imageName = images[currentIndex];
             const imageUrl = `${imageName}.jpg`;
-            const audioUrl = `audios/${imageName}.opus`;
+            const audioUrl = `${imageName}.opus`;
 
             const imageElement = document.getElementById("image");
             const audioElement = new Audio(audioUrl);
