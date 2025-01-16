@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Aleatoria</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #56a374;
+        }
+
+        /* Menú deslizante */
+        .menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .menu a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .menu a:hover {
+            background-color: #575757;
+        }
+
+        .menu .close-btn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        /* Contenedor principal */
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: margin-left 0.5s;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #play-btn {
+            background-color: #007bff;
+        }
+
+        #play-btn:hover {
+            background-color: #0056b3;
+        }
+
+        #reset-btn {
+            background-color: #f44336;
+        }
+
+        #reset-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        /* Estilo para el cuadro de nombres */
+        .name-box-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .name-box {
+            margin: 5px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            color: #333;
+            background-color: #e0e0e0;
+            transition: transform 0.3s ease;
+        }
+
+        .name-box:hover {
+            transform: scale(1.05);
+        }
+
+        /* Estilo de la página "Acerca de" */
+        .about-page {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .about-page h2 {
+            font-size: 30px;
+        }
+
+        .about-page ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .about-page li {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        /* Menú toggle */
+        .menu-toggle:hover {
+            cursor: pointer;
+        }
+
+/* Estilos para cada caja con un color diferente */
+.box-1 {
+    background-color: #FF5733;
+}
+
+.box-2 {
+    background-color: #33FF57;
+}
+
+.box-3 {
+    background-color: #3357FF;
+}
+
+.box-4 {
+    background-color: #ac46a3;
+}
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Menú deslizante -->
+    <div id="myMenu" class="menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">&times;</a>
+        <a href="javascript:void(0)" onclick="showHome(); closeMenu()">Inicio</a>
+        <a href="javascript:void(0)" onclick="showAbout(); closeMenu()">Acerca de</a>
+    </div>
+
+    <!-- Contenedor del contenido principal -->
+    <div id="mainContent" class="container">
+        <h1>Galería Aleatoria</h1>
+        <img id="image" src="" alt="Imagen">
+        <div class="controls">
+            <button id="prev-btn">Anterior</button>
+            <button id="next-btn">Siguiente</button>
+            <button id="play-btn">Reproducir</button>
+            <button id="reset-btn">Reiniciar Juego</button>
+        </div>
+    </div>
+
+    <!-- Página Acerca de -->
+    <div id="aboutPage" class="about-page">
+        <h2>Integrantes</h2>
+        <div class="name-box-container">
+            <div class="name-box box-1">Vanesa Dueñas López</div>
+            <div class="name-box box-2">Fernando Ramírez Acosta</div>
+            <div class="name-box box-3">Pablo Pérez Suárez</div>
+            <div class="name-box box-4">Adrián Sánchez Mendiola</div>
+        </div>
+    </div>
+
+    <span class="menu-toggle" style="font-size:30px;cursor:pointer" onclick="openMenu()">&#9776; Menú</span>
+
+    <script>
+        // Variables para el control de páginas
+        let currentIndex = 0;
+
+        // Imágenes y sonidos
+        const images = [
+            "soplar", "romper", "cortar", "dibujar", "escalar", "cocinar", "llorar", 
+            "borrar", "llamar", "cargar", "aplaudir", "limpiar", "beber", "manejar", 
+            "comer", "alimentar"
+        ];
+
+        function shuffleImages() {
+            for (let i = images.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [images[i], images[j]] = [images[j], images[i]];
+            }
+        }
+
+        function showImage() {
+            const imageName = images[currentIndex];
+            const imageUrl = `${imageName}.jpg`;
+            const audioUrl = `audios/${imageName}.opus`;
+
+            const imageElement = document.getElementById("image");
+            const audioElement = new Audio(audioUrl);
+
+            imageElement.src = imageUrl;
+            imageElement.onerror = () => imageElement.alt = "Imagen no disponible";
+
+            document.getElementById("play-btn").onclick = () => audioElement.play().catch(console.error);
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage();
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage();
+        }
+
+        function resetGame() {
+            location.reload();
+        }
+
+        // Menú deslizante
+        function openMenu() {
+            document.getElementById("myMenu").style.width = "250px";
+            document.getElementById("mainContent").style.marginLeft = "250px";
+        }
+
+        function closeMenu() {
+            document.getElementById("myMenu").style.width = "0";
+            document.getElementById("mainContent").style.marginLeft = "0";
+        }
+
+        // Mostrar página "Inicio"
+        function showHome() {
+            document.getElementById("mainContent").style.display = "block";
+            document.getElementById("aboutPage").style.display = "none";
+        }
+
+        // Mostrar página "Acerca de"
+        function showAbout() {
+            document.getElementById("mainContent").style.display = "none";
+            document.getElementById("aboutPage").style.display = "block";
+        }
+
+        // Inicialización
+        document.addEventListener("DOMContentLoaded", () => {
+            shuffleImages();
+            showImage();
+
+            document.getElementById("next-btn").addEventListener("click", nextImage);
+            document.getElementById("prev-btn").addEventListener("click", prevImage);
+            document.getElementById("reset-btn").addEventListener("click", resetGame);
+
+            showHome(); // Mostrar la página de inicio por defecto
+        });
+    </script>
+
+</body>
+</html>
